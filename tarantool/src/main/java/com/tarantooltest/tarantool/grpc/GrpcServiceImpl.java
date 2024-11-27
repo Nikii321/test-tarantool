@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 @GrpcService
@@ -78,8 +79,13 @@ public class GrpcServiceImpl extends KeyValueServiceGrpc.KeyValueServiceImplBase
             StreamObserver<T> streamObserver
     ) {
         if (ex != null) {
-            log.error(ex.getMessage());
-            streamObserver.onError(Status.INTERNAL.withCause(ex.getCause()).asRuntimeException());
+            log.error("Error occurred: ", ex);
+            Status status = switch (ex) {
+                case NoSuchElementException ignored -> Status.NOT_FOUND;
+                case IllegalArgumentException ignored -> Status.INVALID_ARGUMENT;
+                default -> Status.INTERNAL;
+            };
+            streamObserver.onError(status.withCause(ex.getCause()).asRuntimeException());
         }
         res.forEach(streamObserver::onNext);
         streamObserver.onCompleted();

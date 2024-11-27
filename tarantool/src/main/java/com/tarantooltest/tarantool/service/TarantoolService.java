@@ -5,7 +5,6 @@ import com.tarantool.grpc.Scheme.IsDeleted;
 import com.tarantool.grpc.Scheme.KeyValueModel;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 public interface TarantoolService {
@@ -18,6 +17,4 @@ public interface TarantoolService {
     CompletableFuture<Stream<KeyValueModel>> range(String keySince, String keyTo);
 
     CompletableFuture<KeyValueModel> get(String key);
-
-    void clean() throws ExecutionException, InterruptedException;
 }

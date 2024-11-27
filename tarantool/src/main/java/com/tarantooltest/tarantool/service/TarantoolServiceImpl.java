@@ -126,11 +126,6 @@ public class TarantoolServiceImpl implements TarantoolService {
                 });
     }
 
-    @Override
-    public void clean() throws ExecutionException, InterruptedException {
-        spaceOperations.delete(Conditions.any()).get();
-    }
-
     private KeyValueModel toModel(TarantoolTuple tuple) {
         return KeyValueModel.newBuilder()
                 .setKey(tuple.getString("key")).
