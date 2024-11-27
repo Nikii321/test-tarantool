@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  tarantool:
+    container_name: tarantool
+    image: tarantool/tarantool:3.2.0
+    command: tarantool init.lua
+    volumes:
+      - ./tarantool:/opt/tarantool
+    ports:
+      - "3301:3301"

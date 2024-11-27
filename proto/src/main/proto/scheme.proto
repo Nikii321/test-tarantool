@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_package = "com.tarantool.grpc";
+import "google/protobuf/empty.proto";
+
+message KeyValueModel {
+  string key = 1;
+  bytes value = 2;
+}
+
+message Key{
+  string key = 1;
+}
+
+message RangeRequest{
+  string key_since = 1;
+  string key_to = 2;
+}
+
+message IsDeleted{
+  bool value = 1;
+}
+
+message CountResponse{
+  int64 value = 1;
+}
+service KeyValueService {
+  rpc Put(KeyValueModel) returns (KeyValueModel);
+  rpc Get(Key) returns (KeyValueModel);
+  rpc Delete(Key) returns (IsDeleted);
+  rpc Range(RangeRequest) returns (stream KeyValueModel);
+  rpc Count(google.protobuf.Empty) returns (CountResponse);
+}
